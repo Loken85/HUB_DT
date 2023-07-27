@@ -1,0 +1,28 @@
+name: hubdt_env
+channels:
+  - defaults
+dependencies:
+  - python=3.7
+  - matplotlib
+  - scipy
+  - scikit-image
+  - spyder==4.1.5
+  - pandas
+  - scikit-learn
+  - tensorflow
+  - keras
+  - opentsne
+  - statsmodels
+  - hdbscan
+  - seaborn
+  - shap
+  - pytables
+  - streamlit
+  - pickleshare
+  - pillow
+  - opencv-python
+  - imageio
+  - pyyaml
+  - h5py
+  - pywavelets
+
