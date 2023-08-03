@@ -18,8 +18,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-import cluster_metrics
-import b_utils
+from hubdt import cluster_metrics, b_utils
 
 import hdbscan
 

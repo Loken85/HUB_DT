@@ -14,7 +14,7 @@ import numpy as np
 import scipy.io
 import pickle
 import pandas as pd
-import iterative_smoothing
+from hubdt import iterative_smoothing
 
 
 # Function for loading behavioural encoding

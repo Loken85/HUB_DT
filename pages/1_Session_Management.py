@@ -11,11 +11,9 @@ import streamlit as st
 import numpy as np
 import pickle
 
-import hub_utils
-import hub_constants
-import hub_analysis
+from hubdt import hub_utils, hub_constants, hub_analysis, data_loading
 
-import data_loading
+
 
 
 
@@ -56,9 +54,12 @@ def session_details_load():
         else:
             st.write('Tracking Loaded: False')
             
-        if st.session_state.dlc and not st.session_state.curr_sess.tracking_pickle:
+        if st.session_state.dlc and st.session_state.tracking_type=='dlc':
             feature_selection = True
             sess_feats = hub_utils.load_feats(st.session_state.curr_sess)
+        else:
+            feature_selection = False
+            
         tracking_load_form = st.form(key='tracking_load_form')
         tracking_camera_radio = tracking_load_form.radio(label='Tracking type', options=['2 Camera 3D', 'Single Camera'], horizontal=True)
         if feature_selection:
@@ -172,19 +173,44 @@ def session_details_load():
         else:
             st.write('Neural Embedding: False')
         
-        embedding_form = st.form(key='embedding_form')
-        # TODO: add more options for generating embeddings, maybe even other methods entirely
-        embedding_form_select_type = embedding_form.selectbox(label='Embedding Type',options=('Tracking','Neural'))
-        embedding_form_perp = embedding_form.number_input(label='Perplexity', min_value=10, max_value=10000, value=50)
-        embedding_form_submit = embedding_form.form_submit_button(label='Generate Embedding')
-        embedding_form.text('Warning: May take considerable time')
-    
-        if embedding_form_submit:
-            if embedding_form_select_type=='Tracking':
-                hub_analysis.generate_tracking_embedding(embedding_form_perp)
-            elif embedding_form_select_type=='Neural':
-                hub_analysis.generate_neural_embedding(embedding_form_perp)
+        embedding_select_input = st.radio(label='Embedding Input', options=['Tracking', 'Neural'])
         
+        tsne_tab, umap_tab, topo_tab = st.tabs(['t-SNE', 'UMAP', 'Topology'])
+        
+        with tsne_tab:
+            embedding_form = st.form(key='embedding_form_tsne')        
+            embedding_form_perp = embedding_form.number_input(label='Perplexity', min_value=10, max_value=10000, value=50)
+            embedding_form_submit = embedding_form.form_submit_button(label='Generate Embedding')
+            embedding_form.text('Warning: May take considerable time')
+            
+            if embedding_form_submit:
+                if embedding_select_input=='Tracking':
+                    hub_analysis.generate_tracking_embedding_tsne(embedding_form_perp)
+                elif embedding_select_input=='Neural':
+                    hub_analysis.generate_neural_embedding_tsne(embedding_form_perp)
+        
+        with umap_tab:
+            embedding_form = st.form(key='embedding_form_umap')
+            embedding_form_nn = embedding_form.number_input(label='Neighbours', min_value=10, max_value=1000, value=30)
+            embedding_form_mdist = embedding_form.slider(label='Min Distance', min_value=0.0, max_value=1.0, value=0.0)
+            embedding_form_submit = embedding_form.form_submit_button(label='Generate Embedding')
+            embedding_form.text('Warning: May take considerable time')
+            
+            if embedding_form_submit:
+                if embedding_select_input=='Tracking':
+                    hub_analysis.generate_tracking_embedding_umap(embedding_form_nn, embedding_form_mdist)
+                elif embedding_select_input=='Neural':
+                    hub_analysis.generate_neural_embedding_umap(embedding_form_nn, embedding_form_mdist)
+        
+        with topo_tab:
+            embedding_form = st.form(key='embedding_form_topo')
+            embedding_form_submit = embedding_form.form_submit_button(label='Generate Embedding')
+            embedding_form.text('NOT YET IMPLEMENTED')
+        
+        
+        
+    
+               
     
 
 

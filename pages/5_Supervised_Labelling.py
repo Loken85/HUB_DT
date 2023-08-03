@@ -10,11 +10,9 @@ import streamlit as st
 import numpy as np
 import pickle
 
-import hub_utils
-import hub_constants
-import hub_analysis
+from hubdt import hub_utils, hub_constants, hub_analysis
 
-import random_forests
+from hubdt import random_forests
 
 
 def random_forest_display(rf_type, display_type):

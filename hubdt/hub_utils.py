@@ -17,16 +17,10 @@ import scipy.io
 import skimage.io as skio
 from PIL import Image
 
-import b_utils
-import data_loading
-import cluster_metrics
-import hdb_clustering
-import video_utils
-import behav_session_params
+from hubdt import b_utils, data_loading, cluster_metrics, hdb_clustering, video_utils, behav_session_params
 
-import hub_constants
+from hubdt import hub_constants, hub_analysis
 
-import hub_analysis
 
 #INITIALISATION
 def initialise_session():

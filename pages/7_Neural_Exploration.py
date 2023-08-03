@@ -10,9 +10,7 @@ import streamlit as st
 import numpy as np
 
 
-import hub_utils
-import hub_constants
-import hub_analysis
+from hubdt import hub_utils, hub_constants, hub_analysis
 
 
 

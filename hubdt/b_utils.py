@@ -2,7 +2,7 @@
 """
 Created on Wed Oct  9 14:48:26 2019
 
-@author: adria
+@author: proxy_loken
 
 Utilities for automated behavioural state tracking with deeplabcut input
 """

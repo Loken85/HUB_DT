@@ -10,17 +10,11 @@ Analysis Functions for the HUB-D streamlit application
 import streamlit as st
 import numpy as np
 from openTSNE import TSNE
+from umap import UMAP
 
-import data_loading
-import b_utils
-import wavelets
-import hdb_clustering
-import glms
-import random_forests
-import video_utils
-import t_sne
+from hubdt import data_loading, b_utils, wavelets, hdb_clustering, glms, random_forests, video_utils, t_sne, umap_utils
 
-import hub_utils
+from hubdt import hub_utils
 
 # DICT/DATA GENERATORS
 
@@ -212,7 +206,7 @@ def generate_projections(proj_type,minf,maxf,nump):
     return
 
 @st.cache()
-def generate_tracking_embedding(perp):
+def generate_tracking_embedding_tsne(perp):
     tsne = TSNE(perplexity=perp, initialization='pca', metric='cosine', n_jobs=8)
     t_outp = tsne.fit(st.session_state.b_projections)
     st.session_state.b_tout = t_outp
@@ -223,7 +217,7 @@ def generate_tracking_embedding(perp):
     return
 
 @st.cache()
-def generate_neural_embedding(perp):
+def generate_neural_embedding_tsne(perp):
     tsne = TSNE(perplexity=perp, initialization='pca', metric='cosine', n_jobs=8)
     t_outp = tsne.fit(st.session_state.s_projections)
     st.session_state.s_tout = t_outp
@@ -231,6 +225,40 @@ def generate_neural_embedding(perp):
         del st.session_state['s_density']
     
     return
+
+@st.cache()
+def generate_tracking_embedding_umap(neighbours, m_dist):
+    umap = UMAP(n_neighbors=neighbours, n_components=2, min_dist=m_dist)
+    umap_out = umap.fit_transform(st.session_state.b_projections)
+    st.session_state.b_tout = umap_out
+    if 'b_density' in st.session_state:
+        del st.session_state['b_density']
+    
+    return
+
+@st.cache()
+def generate_neural_embedding_umap(neighbours, m_dist):
+    umap = UMAP(n_neighbors=neighbours, n_components=2, min_dist=m_dist)
+    umap_out = umap.fit_transform(st.session_state.s_projections)
+    st.session_state.s_tout = umap_out
+    if 's_density' in st.session_state:
+        del st.session_state['s_density']
+    
+    return
+
+
+@st.cache()
+def generate_tracking_embedding_topo():
+    
+    
+    return
+
+@st.cache()
+def generate_neural_embedding_topo():
+    
+    
+    return
+
 
 #@st.cache()
 def generate_clustering(min_clust_size, min_samples, selection_method, selection_epsilon):
