@@ -52,7 +52,20 @@ def plot_hdb_over_tsne(t_out, hdb_labels, hdb_probs, noise=False, compare_to=Fal
     fig, ax = plt.subplots()
     ax.scatter(t_out[:,0],t_out[:,1], s=10, linewidth=0, c=cluster_member_colors, alpha=0.25)
     if compare_to:
-        comp_points = t_out[comp_label,:]
+        #comp_points = t_out[comp_label,:]
+        # temp fix for mismatched comparative label length
+        comp_length = np.size(comp_label,0)
+        
+        t_out_length = np.size(t_out,0)
+        
+        if t_out_length > comp_length:
+            t_out_trim = t_out[:comp_length,:]
+            comp_points = t_out_trim[comp_label,:]
+        elif comp_length > t_out_length:
+            comp_points = t_out[comp_label[:t_out_length],:]
+        else:
+            comp_points = t_out[comp_label,:]
+        
         ax.scatter(comp_points[:,0], comp_points[:,1], s=50, marker='x', c='black', alpha=0.25)
     
     ax.xaxis.set_ticklabels([])

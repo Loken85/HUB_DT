@@ -205,7 +205,7 @@ def generate_projections(proj_type,minf,maxf,nump):
         st.session_state.s_projections = np.transpose(scalonp)
     return
 
-@st.cache()
+#@st.cache()
 def generate_tracking_embedding_tsne(perp):
     tsne = TSNE(perplexity=perp, initialization='pca', metric='cosine', n_jobs=8)
     t_outp = tsne.fit(st.session_state.b_projections)
@@ -216,7 +216,7 @@ def generate_tracking_embedding_tsne(perp):
     
     return
 
-@st.cache()
+#@st.cache()
 def generate_neural_embedding_tsne(perp):
     tsne = TSNE(perplexity=perp, initialization='pca', metric='cosine', n_jobs=8)
     t_outp = tsne.fit(st.session_state.s_projections)
@@ -226,7 +226,7 @@ def generate_neural_embedding_tsne(perp):
     
     return
 
-@st.cache()
+#@st.cache()
 def generate_tracking_embedding_umap(neighbours, m_dist):
     umap = UMAP(n_neighbors=neighbours, n_components=2, min_dist=m_dist)
     umap_out = umap.fit_transform(st.session_state.b_projections)
@@ -236,7 +236,7 @@ def generate_tracking_embedding_umap(neighbours, m_dist):
     
     return
 
-@st.cache()
+#@st.cache()
 def generate_neural_embedding_umap(neighbours, m_dist):
     umap = UMAP(n_neighbors=neighbours, n_components=2, min_dist=m_dist)
     umap_out = umap.fit_transform(st.session_state.s_projections)

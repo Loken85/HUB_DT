@@ -15,9 +15,9 @@ This is the landing/front page of the Streamlit App
 
 import streamlit as st
 
-import hub_utils
-import hub_constants
-import hub_analysis
+from hubdt import hub_utils
+from hubdt import hub_constants
+from hubdt import hub_analysis
 
 
 

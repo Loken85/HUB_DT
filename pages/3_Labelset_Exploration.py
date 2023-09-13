@@ -104,10 +104,10 @@ def draw_top_details_display(disp_type):
         top_row_cont = st.container()
         top_row_col1, top_row_col2 = top_row_cont.columns(2)
         top_row_col1.markdown('**Comparative Purities**')
-        top_row_col1.pyplot(hub_utils.draw_comparative_cluster_purities(hub_utils.generate_labelset_purities(label_set,complabel_set)))
+        top_row_col1.pyplot(hub_utils.draw_comparative_cluster_purities(hub_analysis.generate_labelset_purities(label_set,complabel_set)))
         top_row_col2.markdown('**Purities Between Labelsets**')
         direction_radio = top_row_col2.radio(label="Direction",options=('Base -> Comp','Comp -> Base'))
-        base_df, comp_df = hub_utils.draw_comparative_purities_df(hub_utils.generate_labelset_purities(label_set,complabel_set))
+        base_df, comp_df = hub_utils.draw_comparative_purities_df(hub_analysis.generate_labelset_purities(label_set,complabel_set))
         if direction_radio=='Base -> Comp':
             top_row_col2.dataframe(base_df.style.pipe(hub_utils.df_styler_purities), height=150)
         elif direction_radio=='Comp -> Base':
