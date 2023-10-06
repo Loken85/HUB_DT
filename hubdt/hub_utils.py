@@ -99,16 +99,16 @@ def load_tracking(curr_sess, smooth_tracking, tracking_type, features):
     
     
     if tracking_type == '2 Camera 3D':
-        three_d = True
+        st.session_state.three_d =True
     else:
-        three_d = False
+        st.session_state.three_d = False
     
     if curr_sess.tracking_mat:
         tracking = data_loading.load_tracking(curr_sess, smooth=smooth_tracking)
         st.session_state.dlc = False
         st.session_state.tracking_type = 'manual'
     elif curr_sess.tracking_h5:
-        tracking = data_loading.load_tracking(curr_sess, three_d, dlc=True, feats=features)
+        tracking = data_loading.load_tracking(curr_sess, st.session_state.three_d, dlc=True, feats=features)
         st.session_state.dlc = True
         st.session_state.tracking_type = 'dlc'
         st.session_state.feats = features
@@ -132,10 +132,12 @@ def load_encodings(curr_sess):
         st.session_state.behav_labels = encodings
         
         
+        
     # Not all sessions have block start/end markers
-    if curr_sess.neutral_start and 'tracking' in st.session_state:
-        context_labels, context_arr = data_loading.create_context_labels(curr_sess, st.session_state.tracking)
+    if curr_sess.neutral_start and 'bin_tracking' in st.session_state:
+        context_labels, context_arr = data_loading.create_context_labels(curr_sess, st.session_state.bin_tracking)
         st.session_state.context_labels = context_labels
+        
     
 
 def load_neural(curr_sess, bin_size):
@@ -606,8 +608,14 @@ def draw_mean_wavelets(labelset,label,proj_type='Tracking', wave_correct=True, r
     else:
         st.error('Generate Projections before Plotting')
         return
-    
-    fig = b_utils.plot_cluster_wav_mags(projections, labelset, label, st.session_state.feats, st.session_state.freqs, dims=3, wave_correct = wave_correct, response_correct = response_correct, mean_response = mean_response, colour=color)
+    #correct feats list to account for camera input
+    if st.session_state.three_d == True:
+        feats = st.session_state.feats[0:(len(st.session_state.feats)//2)]
+        cam_dims = 3
+    else:
+        feats = st.session_state.feats
+        cam_dims = 2
+    fig = b_utils.plot_cluster_wav_mags(projections, labelset, label, feats, st.session_state.freqs, dims=cam_dims, wave_correct = wave_correct, response_correct = response_correct, mean_response = mean_response, colour=color)
     
     return fig
 
@@ -636,6 +644,7 @@ def draw_mean_fr_label(labelset,label,color='brown'):
     
     stbin = st.session_state.stbin
     #print(np.shape(stbin))
+    labelset, stbin = data_loading.trim_to_match(labelset, stbin)
     inds = labelset==label
     st_cat = stbin[inds,:]
     
@@ -649,7 +658,8 @@ def draw_mean_fr_label(labelset,label,color='brown'):
 
 
 def draw_selectable_comparative_plots(container, plot_type, labelset,complabel_set, label):
-    
+    # make sure labelsets match in length
+    labelset, complabel_set = data_loading.trim_to_match(labelset, complabel_set)    
     # options = ['Scores','Overlap','Single Category Purity']
     if plot_type=='Scores':
         draw_comparative_scores(container, labelset, complabel_set)

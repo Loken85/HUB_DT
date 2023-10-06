@@ -487,6 +487,7 @@ def generate_embedding_density(embed_type):
 # helper for generating list of list of purities between two labelsets
 def generate_labelset_purities(labelset_1,labelset_2,ignore_noise=False):
     
+    labelset_1, labelset_2 = data_loading.trim_to_match(labelset_1, labelset_2)    
     purities = b_utils.compute_labelset_purity(labelset_1,labelset_2,ignore_noise=ignore_noise)
     
     return purities

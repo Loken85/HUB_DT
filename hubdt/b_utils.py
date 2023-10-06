@@ -816,7 +816,6 @@ def calc_mean_response(data, freqs, dims=2):
 def plot_cluster_wav_mags(data, labels, cluster, feats, freqs, dims=2, wave_correct = False, response_correct = False, mean_response = False, colour = 'blue'):
     
     
-    
     # plot params
     plots_per_row = 2
     num_waves = len(freqs)
@@ -854,7 +853,11 @@ def plot_cluster_wav_mags(data, labels, cluster, feats, freqs, dims=2, wave_corr
         
         means = np.mean(clust_data[:,(i*num_waves):(i*num_waves+num_waves)],axis=0)
         errs = sem(clust_data[:,(i*num_waves):(i*num_waves+num_waves)],axis=0)
-        curr_max = max(means)
+        curr_max = max(means,default=0)
+        if not errs.any():
+            errs = np.zeros((num_waves))
+        if not means.any():
+            means = np.zeros((num_waves))
         if curr_max > tot_max:
             tot_max = curr_max
         
