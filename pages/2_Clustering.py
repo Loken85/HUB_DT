@@ -122,12 +122,12 @@ def clustering():
     cluster_form_select_method = cluster_form.selectbox(label='Selection Method',options=('leaf','eom'))
     cluster_form_minsize = cluster_form.number_input(label='Minimum Cluster Size', min_value=50, max_value=2000, value= 200)
     cluster_form_samplesize = cluster_form.number_input(label='Minimum Sample Size', min_value=1, max_value=200, value= 5)
-    cluster_form_selectepsilon = cluster_form.slider(label='Clustering Cutoff Epsilon', min_value=0.00, max_value=0.99, value=0.25)
+    cluster_form_selectepsilon = cluster_form.slider(label='Clustering Cutoff Lambda (1/epsilon)', min_value=0.0, max_value=100.0, value=50.0)
     cluster_form_submit = cluster_form.form_submit_button(label='Perform Clustering')
     
     if cluster_form_submit:
         if cluster_form_select_type=='Tracking':
-            hub_analysis.generate_clustering(cluster_form_minsize, cluster_form_samplesize, cluster_form_select_method, cluster_form_selectepsilon)
+            hub_analysis.generate_clustering(cluster_form_minsize, cluster_form_samplesize, cluster_form_select_method, (1/cluster_form_selectepsilon))
         elif cluster_form_select_type=='Neural':
             st.error('Not Yet Implemented')
     

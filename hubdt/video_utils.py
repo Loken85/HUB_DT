@@ -108,3 +108,24 @@ def frames_to_gif2(vidstream, frames, gif_name, fps=5):
         
     imageio.mimsave(gif_name, image_list, fps=fps)
 
+
+# helper to calculate the conversion from indices to frames
+# INPUTS: sfreq - int(bin rate), vid_fr - int(framerate)
+def calc_fr_conversion(sfreq, vid_fr):
+    
+    conversion = vid_fr/sfreq
+    
+    return conversion
+
+
+
+# helper for converting between indices(labels) and frames(video)
+# this conversion is only necessary if the framerate is different from the bin rate
+# INPUTS: ind - int(index), conversion - double(framerate conversion), offset = int(offset from start of video, optional)
+def index_to_frame(ind, conversion=1, offset = 0):
+    
+    frame = np.copy(ind)
+    frame = np.floor(frame*conversion)
+    frame = int(frame + offset)
+    
+    return frame

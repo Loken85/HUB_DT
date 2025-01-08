@@ -29,7 +29,7 @@ def frame_vis_gif(position):
         labelset = hub_utils.get_labelset(st.session_state.fv_top_labelset_select)
         camera = st.session_state.fv_top_camera_radio
     
-        frame = hub_utils.get_frame(ind, camera)
+        
     elif position == 'bottom':
         # get frame index
         ind = st.session_state.fv_bottom_frame_slider
@@ -37,7 +37,8 @@ def frame_vis_gif(position):
         labelset = hub_utils.get_labelset(st.session_state.fv_bottom_labelset_select)
         camera = st.session_state.fv_bottom_camera_radio
     
-       
+    frame = hub_utils.get_frame(ind, camera)   
+    
     gif_gen_cont = st.container()
     gif_gen_left, gif_gen_right = gif_gen_cont.columns(2)
     
@@ -51,7 +52,7 @@ def frame_vis_gif(position):
     
     if gif_form_submit:
         # do the thing
-        frames = np.arange(ind, ind+gif_length_select)
+        frames = np.arange(frame, ind+gif_length_select)
         hub_utils.generate_gif(frames, camera, 'current_gif.gif', gif_framerate_select)   
     
    
@@ -68,8 +69,7 @@ def frame_vis_gif(position):
 def frame_vis_top():
     
     # get camera
-    camera = st.session_state.fv_top_camera_radio   
-    
+    camera = st.session_state.fv_top_camera_radio      
     # get frame index
     ind = st.session_state.fv_top_frame_slider
     # get labelset
@@ -98,6 +98,7 @@ def frame_vis_bottom():
     
     # get camera
     camera = st.session_state.fv_bottom_camera_radio
+    
     # get frame index
     ind = st.session_state.fv_bottom_frame_slider
     # get labelset
@@ -129,9 +130,13 @@ def frame_vis_sidebar_top(disp_type):
     labelset = hub_utils.get_labelset(fv_top_labelset_select)
     counts_list, max_inds = b_utils.count_consecutive_labels(labelset)
     if disp_type == 'All Frames':
-        bin_tracking = st.session_state.bin_tracking
+        bin_tracking = st.session_state.tracking
         # Frame Selector
-        fv_top_frame_slider = st.sidebar.slider(label= 'Select Frame', key='fv_top_frame_slider', min_value=0, max_value=(np.size(bin_tracking,0)-1), value=0)
+        if labelset is not None:
+            max_frame = np.size(labelset,0)
+        else:
+            max_frame = (np.size(bin_tracking,0)-1)
+        fv_top_frame_slider = st.sidebar.slider(label= 'Select Frame', key='fv_top_frame_slider', min_value=0, max_value=max_frame, value=0)
         
     elif disp_type == 'Frames by Cluster':    
         if labelset is not None:
@@ -156,7 +161,11 @@ def frame_vis_sidebar_bottom(disp_type):
     if disp_type == 'All Frames':
         bin_tracking = st.session_state.bin_tracking
         # Frame Selector
-        fv_bottom_frame_slider = st.sidebar.slider(label= 'Select Frame', key='fv_bottom_frame_slider', min_value=0, max_value=(np.size(bin_tracking,0)-1), value=0)
+        if labelset is not None:
+            max_frame = np.size(labelset,0)
+        else:
+            max_frame = (np.size(bin_tracking,0)-1)
+        fv_bottom_frame_slider = st.sidebar.slider(label= 'Select Frame', key='fv_bottom_frame_slider', min_value=0, max_value=max_frame, value=0)
         
     elif disp_type == 'Frames by Cluster':    
         if labelset is not None:

@@ -66,7 +66,7 @@ def plot_hdb_over_tsne(t_out, hdb_labels, hdb_probs, noise=False, compare_to=Fal
         else:
             comp_points = t_out[comp_label,:]
         
-        ax.scatter(comp_points[:,0], comp_points[:,1], s=50, marker='x', c='black', alpha=0.25)
+        ax.scatter(comp_points[:,0], comp_points[:,1], s=50, marker='x', c='black', alpha=0.10)
     
     ax.xaxis.set_ticklabels([])
     ax.yaxis.set_ticklabels([])

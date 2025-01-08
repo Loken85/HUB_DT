@@ -115,12 +115,13 @@ def generate_proj_dict(proj_type='behaviour'):
 
 
 
-@st.cache
+#@st.cache
 def generate_matlab_export_dict():
     
     exp_dict = {}
-    if 'hdb_labels' in st.session_state:
-        exp_dict['hdb_tracking_labels'] = st.session_state.hdb_labels
+    if 'hdb_labels' in st.session_state and 'hdb_probs' in st.session_state:
+        exp_dict['hdb_labels'] = st.session_state.hdb_labels
+        exp_dict['hdb_probs'] = st.session_state.hdb_probs    
     if 'behav_labels' in st.session_state:
         exp_dict['manual_behav_labels'] = st.session_state.behav_labels
     if 'b_projections' in st.session_state:
@@ -129,6 +130,10 @@ def generate_matlab_export_dict():
         exp_dict['neural_projections'] = st.session_state.s_projections
     if 'stbin' in st.session_state:
         exp_dict['stbin'] = st.session_state.stbin
+    if 'b_tout' in st.session_state:
+        exp_dict['behav_embedding'] = np.array(st.session_state.b_tout)
+    if 's_out' in st.session_state:
+        exp_dict['neural_embedding'] = np.array(st.session_state.s_tout)
     # TODO: Fix GLM exporting to fit new format
     if 'multiglm' in st.session_state:
         exp_dict['multimse'] = st.session_state.mse
@@ -194,9 +199,11 @@ def generate_projections(proj_type,minf,maxf,nump):
     scales, freqs = wavelets.calculate_scales(minf,maxf,st.session_state.curr_sess.sfreq,nump)
     st.session_state.freqs = freqs
     scalonp = wavelets.wavelet_transform_np(data, scales, freqs, st.session_state.curr_sess.sfreq)
+    
     if proj_type=='Tracking':
-        if st.session_state.dlc:
-            sub_scalonp = data_loading.convert_fr(np.transpose(scalonp), 15, 5)
+        if st.session_state.dlc and st.session_state.stbin.any():
+            #TODO: take in neural bin rate and actual framerate as args for conversion
+            sub_scalonp = data_loading.convert_fr(np.transpose(scalonp), st.session_state.curr_sess.vid_fr, st.session_state.curr_sess.sfreq)
             stbin, sub_scalonp = data_loading.trim_to_match(st.session_state.stbin, sub_scalonp)
             st.session_state.b_projections = sub_scalonp
         else:

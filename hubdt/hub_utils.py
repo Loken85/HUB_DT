@@ -452,8 +452,13 @@ def get_data(fetch_type, data_name):
 
 def get_frame(ind, camera):
     
-    frame_ind = b_utils.index_to_frame(ind, offset = st.session_state.curr_sess.frame_start)
-    
+    # get the appropriate frame number, convert fr if necessary
+    if st.session_state.curr_sess.sfreq != st.session_state.curr_sess.vid_fr:
+        conversion = video_utils.calc_fr_conversion(st.session_state.curr_sess.sfreq, st.session_state.curr_sess.vid_fr)
+        frame_ind = video_utils.index_to_frame(ind,conversion,st.session_state.curr_sess.frame_start)
+    else:
+        frame_ind = video_utils.index_to_frame(ind, offset=st.session_state.curr_sess.frame_start)
+        
     
     if camera == 'Camera 1':
         vidstream = st.session_state.vidstream0
@@ -476,7 +481,7 @@ def generate_gif(inds, camera, gif_name, gif_fr):
     elif camera == 'Stack':
         vidstream = st.session_state.vidstream_stack
     
-    # add offset if needed
+    # add offset if needed (this might be redundant)
     frames = inds+st.session_state.curr_sess.frame_start
     # create gif
     video_utils.frames_to_gif2(vidstream, frames, gif_name, gif_fr)

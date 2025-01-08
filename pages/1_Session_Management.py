@@ -142,7 +142,7 @@ def session_details_load():
     with projection_tab:
         st.markdown("### Projections")
         if st.session_state.b_projections.any():
-            st.write('Tracking Projections: True')
+            st.write('Tracking Projections: True '+str(np.shape(st.session_state.b_projections)))
         else:
             st.write('Tracking Projections: False')
     
@@ -164,7 +164,7 @@ def session_details_load():
     with embedding_tab:
         st.markdown("### Embedding")
         if st.session_state.b_tout.any():
-            st.write('Tracking Embedding: True')
+            st.write('Tracking Embedding: True '+str(np.shape(st.session_state.b_tout)))
         else:
             st.write('Tracking Embedding: False')
     

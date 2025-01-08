@@ -449,20 +449,26 @@ def smooth_clusters(data, span):
 # NOTE: this assumes video recorded at 15fps, and labels etc. done at 5 fps
 # default offset is zero, (for 0330i231 video for exmaple, offset is 379 if not already taken off)
 # TODO: change to take in video params(might need a re-format to make sense)
-def indices_to_frames(inds, offset = 0):
+def indices_to_frames(inds, sfreq, vid_fr, offset = 0):
     
+    # deprecated
+    # if there is a difference between the label 'framerate' and th video framerate, calculate the adjustment
+    adjustment = vid_fr/sfreq
     frames = np.copy(inds)
-    frames = frames*3
+    frames = frames*adjustment
     frames = frames + offset
     
     return frames
 
 
 # single frame version of above helper
-def index_to_frame(ind, offset = 0):
+def index_to_frame(ind, sfreq, vid_fr, offset = 0):
     
+    # deprecated
+    # if there is a difference between the label 'framerate' and th video framerate, calculate the adjustment
+    adjustment = vid_fr/sfreq
     frame = np.copy(ind)
-    frame = frame*3
+    frame = frame*adjustment
     frame = int(frame + offset)
     
     return frame
@@ -475,7 +481,7 @@ def index_to_frame(ind, offset = 0):
 # as such it uses the indices_to_frames function to do this conversion
 def gen_frames_for_gif(start_index,length=2,fps=15):
     
-    start_frame = indices_to_frames(start_index)
+    start_frame = index_to_frame(start_index)
     frames = list(range(start_frame,(start_frame+(fps*length)),1))
     
     return frames
