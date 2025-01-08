@@ -8,7 +8,9 @@
 
 This is the home of HUB-DT: A tool for hierarchical behavioural discovery, utlizing video of experimental lab animals to discover behaviours of interest, and to provide multi-modal analysis by combining behavioural labelling with simultaneously recorded electrophysiology data. 
 
-A study making use of this tool can be found here: [bioRxiv](https://www.biorxiv.org/content/10.1101/2023.07.12.548701v1) 
+The details and background of HUB-DT can be found in this report: [Lindsay, 2024: bioRxiv](https://www.biorxiv.org/content/10.1101/2024.01.08.574696v2)
+
+A study making use of this tool can be found here: [Lindsay et al. 2023: bioRxiv](https://www.biorxiv.org/content/10.1101/2023.07.12.548701v1) 
 
 
 ## Installation
@@ -82,6 +84,9 @@ HUB-DT provides a full browser based GUI, and is designed to import video tracki
 
 
 
+A complete report on the background, motivation, and technical details of HUB-DT is currently in preprint [here](https://www.biorxiv.org/content/10.1101/2024.01.08.574696v1) 
 
-A full user guide and explanatory paper are currently in progress. The respository is provided to accompany forthcoming publications (in preprint).
+This report also contains a brief overview of the function and use of the tools' GUI. 
+
+This respository is provided to accompany forthcoming publications (in preprint).
 
